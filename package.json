@@ -1,6 +1,6 @@
 {
   "name": "e-commerce-app",
-  "version": "0.0",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "nodemon ./app.js localhost 3000 "
