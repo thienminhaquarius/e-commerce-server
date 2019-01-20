@@ -4,13 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var passport=require('passport');
+var passport = require('passport');
 //connect mongodb
 require('./app_api/models/db');
 // run passport config
-require('./app_api/config/passport'); 
+require('./app_api/config/passport');
 
-var routesApi=require('./app_api/routes/routes');
+var routesApi = require('./app_api/routes/routes');
 
 var app = express();
 
@@ -26,22 +26,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 // router
 
-app.use('/api',routesApi);
+app.use('/api', routesApi);
 //default link
 
-app.use(function(req,res){
-  res.sendFile(path.join(__dirname,'app_client','index.html'));
+app.use(function (req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -52,7 +52,7 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-app.set('port',process.env.PORT||3000);
-var server=app.listen(app.get('port'),function(){
-	console.log('Server running...');
+app.set('port', process.env.PORT || 3000);
+var server = app.listen(app.get('port'), function () {
+  console.log('Server running...');
 });
