@@ -22,16 +22,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname,'app_client')));
+// app.use(express.static(path.join(__dirname,'app_client')));
 app.use(passport.initialize());
 // router
 
 app.use('/api',routesApi);
 //default link
+
 app.use(function(req,res){
   res.sendFile(path.join(__dirname,'app_client','index.html'));
 });
-//app.use('/sanpham/:id',routesApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

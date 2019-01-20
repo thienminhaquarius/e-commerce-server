@@ -1,7 +1,7 @@
 var passport=require('passport');
 var LocalStrategy=require('passport-local').Strategy;
 var mongoose=require('mongoose');
-var User=require('../models/USER');
+var User=require('../models/USER') ; 
 
 passport.use('local-login',new LocalStrategy(
 	{ usernameField:'email' },

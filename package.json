@@ -1,9 +1,9 @@
 {
-  "name": "baitapweb",
-  "version": "0.0.0",
+  "name": "e-commerce-app",
+  "version": "0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon ./app.js localhost 3000 "
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -22,6 +22,7 @@
     "passport-local": "^1.0.0",
     "serve-favicon": "~2.4.5"
   },
+
   "devDependencies": {
     "gulp": "^3.9.1"
   }
