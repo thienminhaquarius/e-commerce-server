@@ -1,15 +1,13 @@
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
 
-var dbURL="mongodb://127.0.0.1:27017/QuaLuuNiem";
+mongoose.connect(process.env.DEV_DB_URL, { useMongoClient: true });
 
-mongoose.connect(dbURL,{useMongoClient:true});
+var db = mongoose.connection;
 
-var db=mongoose.connection;
-
-db.on('connected',function(){
-	console.log('Mongoose connected to '+dbURL);
+db.on('connected', function () {
+	console.log('Mongoose connected to ' + process.env.DEV_DB_URL);
 });
-db.on('error',console.error.bind(console,'MongoDB connection error:'));
-db.on('disconnected',function(){
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.on('disconnected', function () {
 	console.log('Mongoose disconnected');
 });

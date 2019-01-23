@@ -1,39 +1,48 @@
-var mongoose=require('mongoose'); // Ma hoa mat khau
-var bcrypt  = require('bcrypt-nodejs'); //tao jsonwebtoken
-var jwt=require('jsonwebtoken');
-var ObjectId=mongoose.Schema.ObjectId; // kieu du lieu id cua mongoose
+var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
+var ObjectId = mongoose.Schema.ObjectId;
+const role = require('../config/role');
 
 var userSchema = new mongoose.Schema({
-	ten:{type:String,required:true},
-
-	email:{type:String,required:true,unique:true},
-
-	password:{type:String,required:true},
-
-	dienThoai:{type:String},
-
-	donHangDaMua:[ObjectId],
-	gioHang:[ObjectId]
+	firstName: { type: String, required: true },
+	lastName: { type: String, required: true },
+	email: { type: String, required: true, unique: true },
+	password: { type: String, required: true },
+	hash: { type: String, require: true },
+	primPhone: { type: String, required: true, unique: true },
+	role: { type: String, default: role.user }
 });
 
-userSchema.methods.maHoaPassword=function(password){
-	this.password= bcrypt.hashSync(password,bcrypt.genSaltSync(8),null);
+userSchema.methods.encryptPassword = async function (password) {
+	try {
+		const hash = await bcrypt.genSalt(10);
+		this.hash = hash;
+		this.password = await bcrypt.hash(password, this.hash);
+
+		return this.password;
+
+	} catch (err) {
+		return Promise.reject(err);
+	}
 };
 
-userSchema.methods.soSanhPassword=function(password){
-	return bcrypt.compareSync(password,this.password);
+userSchema.methods.comparePassword = function (password) {
+	return bcrypt.compareSync(password, this.password);
 };
 
-userSchema.methods.taoJwt=function(){
-	var hetHang=new Date();
-	hetHang.setDate(hetHang.getDate()+7);	// jwt co hang su dung trong vong 7 ngay
+userSchema.methods.createJwt = function () {
+	let expiryTime = new Date();
+	expiryTime.setDate(expiryTime.getDate() + 7);
 	return jwt.sign({
-		_id:this.id,
-		email:this.email,
-		name:this.ten,
-		exp:parseInt(hetHang.getTime()/1000) // tinh ra tong so giay het han 
-	}, 'maJsonWebToken'); //ten secret
+		_id: this._id,
+		role: this.role,
+		email: this.email,
+		primPhone: this.primPhone,
+		firstName: this.firstName,
+		lastName: this.lastName,
+		expiryTime: parseInt(expiryTime.getTime() / 1000)
+	}, process.env.JWT_KEY);
 }
 
-
-module.exports=mongoose.model('User',userSchema);
+module.exports = mongoose.model('User', userSchema);

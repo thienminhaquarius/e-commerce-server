@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var SanPham = require('../models/SANPHAM');
+var SanPham = require('../models/PRODUCT');
 var User = require('../models/USER');
 
 var senJsonRespond = function (res, status, content) {

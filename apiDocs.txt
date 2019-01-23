@@ -1,0 +1,23 @@
+// login
+
+//home
+    api| GET: /api/home?=8
+
+------------------------------------------------
+//products
+    //create products
+    api| POST: /api/taosanpham
+    re.body| 
+        tenSanPham:Vòng tay
+        tenFileAnh:/uploads/vongtay4.jpg
+        soLuong:8
+        gia:50000
+        loaiSanPham:vongtay
+        moTa:aa iii uuu
+------------------------------------------------
+// Auth
+    //Login
+
+    
+
+        

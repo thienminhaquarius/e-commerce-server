@@ -1,25 +1,26 @@
-var passport=require('passport');
-var LocalStrategy=require('passport-local').Strategy;
-var mongoose=require('mongoose');
-var User=require('../models/USER') ; 
+//config passport
 
-passport.use('local-login',new LocalStrategy(
-	{ usernameField:'email' },
-	function(username,password,done){
-		User.findOne({email:username},function(err,user){
-			if(err)
-			{
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var User = require('../models/USER');
+
+passport.use('local-login', new LocalStrategy(
+	{ usernameField: 'primPhone' },
+	function (username, password, done) {
+		User.findOne({ primPhone: username }, function (err, user) {
+			if (err) {
 				return done(err);
 			}
-			if(!user)
-			{
-				return done(null,false,{"message":'Email hoac Mat khau khong dung'});
+			if (!user) {
+				console.log('not user')
+				return done(null, false, { "msg": 'username or password is incorrect' });
 			}
 
-			if(!user.soSanhPassword(password))
-			{
-				return done(null,false,{"message":'Email hoac Mat khau khong dung'});
+			if (!user.comparePassword(password)) {
+				console.log('compare pass')
+
+				return done(null, false, { "msg": 'username or password is incorrect' });
 			}
-			return done(null,user);
+			return done(null, user);
 		});
-}));
+	}));

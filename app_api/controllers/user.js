@@ -1,6 +1,6 @@
 var mongoose=require('mongoose');
 var User=require('../models/USER');
-var SanPham=require('../models/SANPHAM');
+var SanPham=require('../models/PRODUCT');
 
 var sendJsonRespone=function(res,status,content){
 	res.status(status);

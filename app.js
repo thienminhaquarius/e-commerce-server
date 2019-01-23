@@ -1,43 +1,45 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var favicon = require('serve-favicon');
+
+//config local environment variables
+require('dotenv').config();
 //connect mongodb
 require('./app_api/models/db');
 // run passport config
 require('./app_api/config/passport');
 
-var routesApi = require('./app_api/routes/routes');
-
 var app = express();
 
-// view engine setup
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));//?
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.static(path.join(__dirname,'app_client')));
 app.use(passport.initialize());
+
 // router
-
+var routesApi = require('./app_api/routes/routes');
 app.use('/api', routesApi);
-//default link
 
-app.use(function (req, res) {
+//default link
+app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+//catch 404 and forward to error handler
+app.use(function (err, req, res, next) {
+  if (res.headersSent) {
+    return next(err)
+  }
+  res.status(500)
+  res.render('error', { error: err })
 });
 
 // error handler
@@ -52,7 +54,8 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
 app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
-  console.log('Server running...');
+  console.log(`Server running at port ${app.get('port')} `);
 });
